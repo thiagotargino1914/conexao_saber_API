@@ -1,0 +1,60 @@
+{
+    "users": [
+        {
+            "email": "thiagotargino0802@gmail.com",
+            "password": "123456"
+        },
+        {
+            "email": "emailteste1@gmail.com",
+            "password": "123456"
+        }
+    ],
+    "schools": [
+        {
+            "email": "thiagotargino0802@gmail.com",
+            "password": "123456",
+            "name": "thiagotargino0802@gmail.com"
+        },
+        {
+            "email": "emailteste@gmail.com",
+            "password": "123456",
+            "name": "emailteste@gmail.com"
+        },
+        {
+            "email": "emailteste1@gmail.com",
+            "password": "",
+            "name": "emailteste1@gmail.com"
+        },
+        {
+            "email": "teste2@gmailcom",
+            "password": "123456",
+            "name": "teste2@gmailcom"
+        }
+    ],
+    "courses": [
+        {
+            "id": 1,
+            "title": "Matemática ENEM",
+            "description": "Foco em álgebra, funções e geometria analítica.",
+            "teacher": "Prof. Álvaro",
+            "lessons": [
+                {
+                    "title": "Geometria analítica",
+                    "url": "https:\/\/youtu.be\/lHqTFWNBtmQ?si=6VC62RnFC7cmy4me"
+                }
+            ]
+        },
+        {
+            "id": 1758489472,
+            "title": "Português ENEM",
+            "description": "Concordância verbal e nominal, Colocação pronominal e Figuras de linguagem.",
+            "teacher": "Prof. Diego",
+            "lessons": [
+                {
+                    "title": "Concordância Verbal - Aula 01",
+                    "url": "https:\/\/youtu.be\/4ZJnTqTk4_Y?si=1nBngW3L81R71LNL"
+                }
+            ]
+        }
+    ]
+}

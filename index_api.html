@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Conexão Saber - Aluno</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="theme-color" content="#2563EB"/>
+</head>
+<body>
+  <div class="container py-4">
+    <h1 class="h4 mb-3">Conexão Saber - Sua Conexão com o Futuro</h1>
+    <div id="auth" class="card p-3 mb-3">
+      <h2 class="h6">Login / Cadastro (Aluno)</h2>
+      <input id="email" class="form-control mb-2" placeholder="E-mail">
+      <input id="password" type="password" class="form-control mb-2" placeholder="Senha">
+      <div class="d-flex gap-2">
+        <button id="btnLogin" class="btn btn-primary flex-grow-1">Entrar</button>
+        <button id="btnRegister" class="btn btn-outline-secondary flex-grow-1">Cadastrar</button>
+      </div>
+    </div>
+
+    <div id="app" style="display:none">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong id="userEmail"></strong>
+        <button id="btnLogout" class="btn btn-sm btn-danger">Sair</button>
+      </div>
+      <div id="coursesList"></div>
+    </div>
+  </div>
+
+<script>
+const API = window.location.origin + '/conexaosaber_repo/api.php';
+
+async function apiGet(){
+  const res = await fetch(API);
+  return await res.json();
+}
+
+async function apiPost(action, payload){
+  const res = await fetch(API + '?action=' + action, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  return await res.json();
+}
+
+const auth = document.getElementById('auth');
+const app = document.getElementById('app');
+const emailIn = document.getElementById('email');
+const passIn = document.getElementById('password');
+const btnLogin = document.getElementById('btnLogin');
+const btnRegister = document.getElementById('btnRegister');
+const btnLogout = document.getElementById('btnLogout');
+const userEmail = document.getElementById('userEmail');
+const coursesList = document.getElementById('coursesList');
+
+async function renderCourses(){
+  const data = await apiGet();
+  coursesList.innerHTML = '';
+  (data.courses || []).forEach(c=>{
+    const card = document.createElement('div');
+    card.className='card mb-2 p-3';
+    card.innerHTML = `
+      <h5 class="mb-1">${c.title}</h5>
+      <div class="mb-2 text-muted small">${c.teacher}</div>
+      <p>${c.description||''}</p>
+      <button class="btn btn-sm btn-primary" onclick="openCourse(${c.id})">Abrir Curso</button>
+    `;
+    coursesList.appendChild(card);
+  });
+}
+
+async function openCourse(id){
+  const data = await apiGet();
+  const c = (data.courses || []).find(x=>x.id==id);
+  if(!c) return alert('Curso não encontrado');
+
+  let html = `
+    <div class="mb-3">
+      <button class="btn btn-sm btn-secondary" onclick="renderCourses()">← Voltar</button>
+    </div>
+    <h5>${c.title}</h5>
+    <p class="text-muted">${c.teacher || ''}</p>
+    <ul class="list-group mt-3">`;
+
+  (c.lessons || []).forEach((l,i)=>{
+    html += `
+      <li class="list-group-item">
+        <strong>${i+1} — ${l.title}</strong><br>
+        <a href="${l.url}" target="_blank">Abrir aula</a>
+      </li>`;
+  });
+
+  html += `</ul>`;
+  coursesList.innerHTML = html;
+}
+
+btnLogin.addEventListener('click', async ()=>{
+  const resp = await apiPost('login_user', {email: emailIn.value, password: passIn.value});
+  if(resp.ok){
+    sessionStorage.setItem('integra_user', JSON.stringify(resp.user));
+    startApp();
+  } else alert(resp.error || 'Erro no login');
+});
+
+btnRegister.addEventListener('click', async ()=>{
+  const resp = await apiPost('register_user', {email: emailIn.value, password: passIn.value});
+  if(resp.ok){ alert('Cadastrado com sucesso'); } else alert(resp.error || 'Erro');
+});
+
+btnLogout.addEventListener('click', ()=>{ sessionStorage.removeItem('integra_user'); location.reload(); });
+
+function startApp(){
+  const u = JSON.parse(sessionStorage.getItem('integra_user'));
+  if(!u) return;
+  auth.style.display='none';
+  app.style.display='block';
+  userEmail.textContent = u.email;
+  renderCourses();
+}
+
+if(sessionStorage.getItem('integra_user')) startApp();
+</script>
+</body>
+</html>
