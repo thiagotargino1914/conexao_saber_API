@@ -9,10 +9,6 @@ conexaosaber_repo/
 ├── api.php                  # API PHP para integração
 ├── index_api.html           # Interface do aluno (online)
 ├── school_api.html          # Interface da escola (online)
-├── index.html               # Interface do aluno (offline/PWA)
-├── escola.html              # Interface da escola (offline/PWA)
-├── manifest.json            # Configuração do PWA (versão offline)
-├── service-worker.js        # Cache offline (versão offline)
 ├── data/
 │   └── integraedu_data.json # Base de dados em JSON
 ├── docs/
