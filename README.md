@@ -1,6 +1,6 @@
 # Conexão Saber
 
-Plataforma de integração entre escolas e alunos para oferta de cursos preparatórios ao ENEM.  
+Plataforma de integração entre escolas e alunos, voltada para a oferta de cursos preparatórios para o ENEM. 
 O sistema permite que a escola cadastre cursos e aulas, e que os alunos acessem os conteúdos online.
 
 ## Estrutura do Projeto
