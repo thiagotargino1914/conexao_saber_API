@@ -36,7 +36,6 @@ function readData($path){
 }
 
 function writeData($path, $data){
-    // write with lock
     $tmp = $path . '.tmp';
     $encoded = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
     file_put_contents($tmp, $encoded, LOCK_EX);
@@ -46,7 +45,6 @@ function writeData($path, $data){
 
 $data = readData($dataFile);
 
-// Helper: send response
 function res($payload, $code=200){
     http_response_code($code);
     echo json_encode($payload, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
@@ -57,7 +55,7 @@ if($method === 'GET' && !$action){
     res($data);
 }
 
-// Register school
+// Resgistrar escola
 if($method === 'POST' && $action === 'register_school'){
     if(!isset($body['email']) || !isset($body['password'])){
         res(['error'=>'email and password required'],400);
@@ -69,7 +67,7 @@ if($method === 'POST' && $action === 'register_school'){
     res(['ok'=>true,'school'=>$school],201);
 }
 
-// Login school
+// Login escola
 if($method === 'POST' && $action === 'login_school'){
     foreach($data['schools'] as $s){
         if($s['email'] === $body['email'] && $s['password'] === $body['password']){
@@ -79,7 +77,7 @@ if($method === 'POST' && $action === 'login_school'){
     res(['error'=>'invalid credentials'],401);
 }
 
-// Register user (student)
+// registrar usuário (estudante)
 if($method === 'POST' && $action === 'register_user'){
     if(!isset($body['email']) || !isset($body['password'])) res(['error'=>'email and password required'],400);
     foreach($data['users'] as $u){ if($u['email'] === $body['email']) res(['error'=>'user exists'],400); }
@@ -89,7 +87,7 @@ if($method === 'POST' && $action === 'register_user'){
     res(['ok'=>true,'user'=>$user],201);
 }
 
-// Login user
+// Login usuário
 if($method === 'POST' && $action === 'login_user'){
     foreach($data['users'] as $u){
         if($u['email'] === $body['email'] && $u['password'] === $body['password']){
@@ -99,7 +97,7 @@ if($method === 'POST' && $action === 'login_user'){
     res(['error'=>'invalid credentials'],401);
 }
 
-// Add course (by school)
+// Add curso (escola)
 if($method === 'POST' && $action === 'add_course'){
     if(!isset($body['title'])) res(['error'=>'title required'],400);
     $id = time();
@@ -115,7 +113,6 @@ if($method === 'POST' && $action === 'add_course'){
     res(['ok'=>true,'course'=>$course],201);
 }
 
-// Add lesson to course
 if($method === 'POST' && $action === 'add_lesson'){
     if(!isset($body['course_id']) || !isset($body['title']) || !isset($body['url'])) res(['error'=>'course_id,title,url required'],400);
     $found=false;
@@ -132,7 +129,7 @@ if($method === 'POST' && $action === 'add_lesson'){
     res(['ok'=>true],201);
 }
 
-// Edit lesson
+// Editar
 if($method === 'POST' && $action === 'edit_lesson'){
     if(!isset($body['course_id']) || !isset($body['lesson_index']) || !isset($body['title']) || !isset($body['url']))
         res(['error'=>'course_id, lesson_index, title, url required'],400);
@@ -149,7 +146,7 @@ if($method === 'POST' && $action === 'edit_lesson'){
     res(['error'=>'curso ou aula não encontrada'],404);
 }
 
-// Delete lesson
+// Deletar
 if($method === 'POST' && $action === 'delete_lesson'){
     if(!isset($body['course_id']) || !isset($body['lesson_index']))
         res(['error'=>'course_id, lesson_index required'],400);
@@ -165,7 +162,6 @@ if($method === 'POST' && $action === 'delete_lesson'){
     res(['error'=>'curso ou aula não encontrada'],404);
 }
 
-// Deleta o curso
 if($method === 'POST' && $action === 'delete_course'){
     if(!isset($body['course_id'])) res(['error'=>'course_id required'],400);
 
@@ -186,6 +182,5 @@ if($method === 'POST' && $action === 'delete_course'){
     }
 }
 
-// Fallback: not found
 res(['error'=>'unknown action or method','action'=>$action,'method'=>$method],404);
 ?>
