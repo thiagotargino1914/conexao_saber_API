@@ -12,16 +12,16 @@ Assim, a API atua como ponte entre escola e aluno, promovendo acesso à cursos e
 ## Estrutura do Projeto
 ```
 conexaosaber_repo/
-├── api.php                  # API PHP para integração
-├── index_api.html           # Interface do aluno (online)
-├── school_api.html          # Interface da escola (online)
-├── data/
-│   └── integradeu_data.json # Base de dados em JSON
-├── docs/
-│   └── API.md               # Documentação detalhada dos endpoints
-├── teste/
-│   └── api_test.php         # Testes básicos dos endpoints
-└── ConexaoSaber.postman_collection.json
+├── api.php                      # API PHP para integração  
+├── index_api.html               # Interface do aluno (online)  
+├── escola_api.html              # Interface da escola (online)  
+├── data/  
+│   └── integradeu_data.json     # Base de dados em JSON  
+├── docs/  
+│   └── API.md                   # Documentação detalhada dos endpoints  
+├── teste/  
+│   └── api_test.php             # Testes básicos dos endpoints  
+└── ConexaoSaber.postman_collection.json  # Coleção para uso no Postman
 ```
 
 ## Descrição Funcional
