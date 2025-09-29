@@ -1,7 +1,13 @@
-# Conexão Saber
+# Conexão Saber API
 
-Plataforma de integração entre escolas e alunos, voltada para a oferta de cursos preparatórios para o ENEM. 
-O sistema permite que a escola cadastre cursos e aulas, e que os alunos acessem os conteúdos online.
+## Objetivo do Trabalho  
+O objetivo é criar uma API REST que integre dois sistemas distintos:  
+- **Sistema da Escola**: responsável por cadastrar cursos e aulas.  
+- **Sistema do Aluno**: responsável por acessar os conteúdos cadastrados.  
+
+Assim, a API atua como ponte entre escola e aluno, promovendo acesso à cursos e aulas preparatórias para o Enem.
+
+---
 
 ## Estrutura do Projeto
 ```
@@ -13,10 +19,24 @@ conexaosaber_repo/
 │   └── integraedu_data.json # Base de dados em JSON
 ├── docs/
 │   └── API.md               # Documentação detalhada dos endpoints
-├── tests/
+├── teste/
 │   └── api_test.php         # Testes básicos dos endpoints
 └── ConexaoSaber.postman_collection.json
 ```
+
+## Descrição Funcional
+A plataforma permite que:
+- Escolas cadastrem cursos e aulas.  
+- Alunos consultem e se inscrevam em cursos.  
+- A comunicação ocorra via **API REST/HTTP com JSON**.
+
+---
+
+## Arquitetura da API
+A API segue o modelo cliente-servidor.  
+O fluxo principal é:
+
+**Escola (Cadastro de Cursos/Aulas) ⇄ API REST ⇄ Aluno (Consumo de Conteúdo)**
 
 ## Endpoints Principais
 
@@ -50,6 +70,8 @@ conexaosaber_repo/
 
 Veja `docs/API.md` para a lista completa.
 
+## Instruções de Execução
+
 ## Como rodar no Laragon
 
 1. Copie a pasta `conexaosaber_repo` para `C:\laragon\www`.  
@@ -58,9 +80,26 @@ Veja `docs/API.md` para a lista completa.
    - **Escola:** `http://localhost/conexaosaber_repo/school_api.html`  
    - **Aluno:** `http://localhost/conexaosaber_repo/index_api.html`  
    - **API:** `http://localhost/conexaosaber_repo/api.php`  
+4. Importar a coleção do Postman (`ConexaoSaber.postman_collection.json`).
 
 ## Testes
-- Execute `php tests/api_test.php` para rodar os testes básicos dos endpoints.  
+- Execute `teste/api_test.php` para rodar os testes básicos dos endpoints.  
 
-## ODS 11
-Esse projeto está alinhado ao ODS 11 - Cidades e Comunidades Sustentáveis, ajudando a ampliar o acesso a cursos preparatórios para o ENEM. Assim, promove mais inclusão social e igualdade de oportunidades no campo da educação.
+## Relação com ODS 11
+O projeto **Conexão Saber** contribui com o **ODS 11 - Cidades e Comunidades Sustentáveis**,  
+pois amplia o acesso à educação, reduz desigualdades sociais e promove inclusão digital. 
+
+---
+
+## Equipe
+- Cleberson Assunção Tavares – 2325404  
+- Rodrigo de Queiroz Oliveira Rodrigues - 2326198  
+- Mayara Pinto da Silva – 2317573  
+- Francisco Flavio Rodrigues de Menezes – 2314219  
+- Nicolas Lima Ribeiro - 2326327  
+- Thiago Targino de Souza – 2326340  
+
+**Papel dos integrantes:**  
+- Desenvolvimento: Thiago, Nicolas  
+- Testes: Rodrigo, Mayara  
+- Documentação: Cleberson, Francisco  
