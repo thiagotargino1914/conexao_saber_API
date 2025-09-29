@@ -16,7 +16,7 @@ conexaosaber_repo/
 ├── index_api.html           # Interface do aluno (online)
 ├── school_api.html          # Interface da escola (online)
 ├── data/
-│   └── integraedu_data.json # Base de dados em JSON
+│   └── integradeu_data.json # Base de dados em JSON
 ├── docs/
 │   └── API.md               # Documentação detalhada dos endpoints
 ├── teste/
