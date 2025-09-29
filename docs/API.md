@@ -103,3 +103,22 @@ Todas as requisições usam `Content-Type: application/json` e método **POST**.
 ```json
 {"ok":true}
 ```
+
+---
+
+## 🔴 Tratamento de Erros
+
+- **400 Bad Request** → entrada inválida.  
+  ```json
+  {"erro": "Dados inválidos"}
+  ```
+
+- **404 Not Found** → recurso não encontrado.  
+  ```json
+  {"erro": "Recurso não encontrado"}
+  ```
+
+- **500 Internal Server Error** → erro inesperado no servidor.  
+  ```json
+  {"erro": "Erro interno, tente novamente mais tarde"}
+  ```
