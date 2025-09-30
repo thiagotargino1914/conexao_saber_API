@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Conexão Saber - Escola (Offline)</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{background:#f3f4f6}
+    .card{border-radius:12px}
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <h1 class="h4 mb-3">Conexão Saber - Escola (Offline)</h1>
+
+    <div id="auth" class="card p-3 mb-3">
+      <h2 class="h6">Login / Cadastro (Escola)</h2>
+      <input id="s_email" class="form-control mb-2" placeholder="E-mail da instituição">
+      <input id="s_password" type="password" class="form-control mb-2" placeholder="Senha">
+      <div class="d-flex gap-2">
+        <button id="s_login" class="btn btn-primary flex-grow-1">Entrar</button>
+        <button id="s_register" class="btn btn-outline-secondary flex-grow-1">Cadastrar</button>
+      </div>
+    </div>
+
+    <div id="panel" style="display:none">
+      <div class="card p-3 mb-3">
+        <h5>Nova vaga / curso</h5>
+        <input id="courseTitle" class="form-control mb-2" placeholder="Título do curso">
+        <input id="courseTeacher" class="form-control mb-2" placeholder="Professor">
+        <textarea id="courseDesc" class="form-control mb-2" placeholder="Descrição"></textarea>
+        <button id="addCourse" class="btn btn-success">Adicionar Curso</button>
+      </div>
+
+      <div id="coursesArea"></div>
+      <button id="logout" class="btn btn-danger mt-3">Sair</button>
+    </div>
+
+    <small class="text-muted">Os dados são salvos no navegador (localStorage)</small>
+  </div>
+
+<script>
+if(!localStorage.getItem('integraedu_data')){
+  const data = { schools:[], courses:[] };
+  localStorage.setItem('integraedu_data', JSON.stringify(data));
+}
+let data = JSON.parse(localStorage.getItem('integraedu_data'));
+
+const auth = document.getElementById('auth');
+const panel = document.getElementById('panel');
+const s_email = document.getElementById('s_email');
+const s_password = document.getElementById('s_password');
+const s_login = document.getElementById('s_login');
+const s_register = document.getElementById('s_register');
+const addCourse = document.getElementById('addCourse');
+const coursesArea = document.getElementById('coursesArea');
+const logout = document.getElementById('logout');
+
+s_register.addEventListener('click', ()=>{
+  if(!s_email.value || !s_password.value) return alert('Preencha e-mail e senha');
+  const exists = data.schools.find(x=>x.email===s_email.value);
+  if(exists) return alert('Escola já cadastrada');
+  const school = {email:s_email.value, password:s_password.value, name:'Escola '+s_email.value};
+  data.schools.push(school);
+  localStorage.setItem('integraedu_data', JSON.stringify(data));
+  alert('Escola cadastrada. Faça login.');
+});
+
+s_login.addEventListener('click', ()=>{
+  const school = data.schools.find(x=>x.email===s_email.value && x.password===s_password.value);
+  if(!school) return alert('Credenciais inválidas');
+  sessionStorage.setItem('integra_school', JSON.stringify(school));
+  startPanel();
+});
+
+function startPanel(){
+  const s = JSON.parse(sessionStorage.getItem('integra_school'));
+  if(!s) return;
+  auth.style.display='none';
+  panel.style.display='block';
+  renderCourses();
+}
+
+addCourse.addEventListener('click', ()=>{
+  const title = document.getElementById('courseTitle').value;
+  const teacher = document.getElementById('courseTeacher').value;
+  const desc = document.getElementById('courseDesc').value;
+  if(!title) return alert('Título obrigatório');
+  const id = Date.now();
+  const course = {id,title,teacher,description:desc,lessons:[]};
+  if(!data.courses) data.courses = [];
+  data.courses.push(course);
+  localStorage.setItem('integraedu_data', JSON.stringify(data));
+  renderCourses();
+  document.getElementById('courseTitle').value='';
+  document.getElementById('courseTeacher').value='';
+  document.getElementById('courseDesc').value='';
+});
+
+function renderCourses(){
+  data = JSON.parse(localStorage.getItem('integraedu_data'));
+  coursesArea.innerHTML = '';
+  (data.courses||[]).forEach(c=>{
+    const card = document.createElement('div');
+    card.className='card mb-2 p-3';
+    card.innerHTML = `
+      <h5 class="mb-1">${c.title}</h5>
+      <div class="mb-2 text-muted small">${c.teacher}</div>
+      <p>${c.description||''}</p>
+      <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-primary" onclick="addLesson(${c.id})">Adicionar Aula</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteCourse(${c.id})">Remover</button>
+      </div>
+    `;
+    coursesArea.appendChild(card);
+  });
+}
+
+function addLesson(id){
+  const title = prompt('Título da aula');
+  const url = prompt('URL da aula (YouTube, link público ou arquivo)');
+  if(!title || !url) return alert('Título e URL necessários');
+  data = JSON.parse(localStorage.getItem('integraedu_data'));
+  const c = data.courses.find(x=>x.id===id);
+  if(!c) return alert('Curso não encontrado');
+  c.lessons = c.lessons||[];
+  c.lessons.push({title,url});
+  localStorage.setItem('integraedu_data', JSON.stringify(data));
+  renderCourses();
+  alert('Aula adicionada');
+}
+
+function deleteCourse(id){
+  if(!confirm('Remover curso?')) return;
+  data = JSON.parse(localStorage.getItem('integraedu_data'));
+  data.courses = data.courses.filter(x=>x.id!==id);
+  localStorage.setItem('integraedu_data', JSON.stringify(data));
+  renderCourses();
+}
+
+logout.addEventListener('click', ()=>{ sessionStorage.removeItem('integra_school'); location.reload(); });
+
+if(sessionStorage.getItem('integra_school')) startPanel();
+</script>
+</body>
+</html>
