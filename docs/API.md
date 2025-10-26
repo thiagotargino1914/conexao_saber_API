@@ -106,7 +106,7 @@ Todas as requisições usam `Content-Type: application/json` e método **POST**.
 
 ---
 
-## 🔴 Tratamento de Erros
+## Tratamento de Erros
 
 - **400 Bad Request** → entrada inválida.  
   ```json
